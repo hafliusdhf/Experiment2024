@@ -24,6 +24,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "My Application5"
+rootProject.name = "Mobile Software Implementation"
 include(":app")
  
