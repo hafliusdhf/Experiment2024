@@ -1,9 +1,6 @@
 package com.example.casper.Experiment2024;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
