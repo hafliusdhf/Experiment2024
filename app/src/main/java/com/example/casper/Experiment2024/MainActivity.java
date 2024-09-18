@@ -1,6 +1,7 @@
 package com.example.casper.Experiment2024;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         //使用布局文件创建控件
         setContentView(R.layout.activity_main);
+        TextView textViewHelloWorld = findViewById(R.id.textview_hello_world);
+        textViewHelloWorld.setText(R.string.hello_china);
+        textViewHelloWorld.setText(R.string.hello_jnu);
 
         /*
         RelativeLayout relativeLayout = new RelativeLayout(this);
