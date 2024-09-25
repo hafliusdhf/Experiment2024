@@ -3,4 +3,12 @@
     <string name="hello_world">Hello World!</string>
     <string name="hello_china">Hello China!</string>
     <string name="hello_jnu">Hello Jnu</string>
+    <string name="show_message">Show Message</string>
+    <string name="message">Message</string>
+    <string name="you_have_clicked">"You have clicked "</string>
+    <string name="positive">Positive</string>
+    <string name="you_clicked_yes">you clicked yes</string>
+    <string name="you_clicked_no">you clicked no</string>
+    <string name="the_dialog_shows">对话框显示了</string>
+    <string name="the_dialog_disppeared">对话框消失了</string>
 </resources>
