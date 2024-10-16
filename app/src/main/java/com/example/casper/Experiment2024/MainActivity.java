@@ -3,21 +3,31 @@ package com.example.casper.Experiment2024;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private String clickedText = "";
+    private ArrayList<Item> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,65 +35,24 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         //使用布局文件创建控件
         setContentView(R.layout.activity_main);
-        TextView textViewHelloWorld = findViewById(R.id.textview_hello_world);
-        textViewHelloWorld.setOnClickListener(new TextViewOnClickListener());
-        TextView textViewHelloChina = findViewById(R.id.textview_hello_china);
-        textViewHelloChina.setOnClickListener(new TextViewOnClickListener());
-        TextView textViewHelloJNU = findViewById(R.id.textview_hello_jnu);
-        textViewHelloJNU.setOnClickListener(new TextViewOnClickListener());
 
-        TextView textViewHelloWorld1 = findViewById(R.id.textview_hello_world1);
-        textViewHelloWorld1.setOnClickListener(new TextViewOnClickListener());
-        TextView textViewHelloChina1 = findViewById(R.id.textview_hello_china1);
-        textViewHelloChina1.setOnClickListener(new TextViewOnClickListener());
-        TextView textViewHelloJNU1 = findViewById(R.id.textview_hello_jnu1);
-        textViewHelloJNU1.setOnClickListener(new TextViewOnClickListener());
+        RecyclerView mainRecyclerView = findViewById(R.id.recyclerview_items);
+        mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Button buttonShowMessage = findViewById(R.id.button_show_message);
-        buttonShowMessage.setOnClickListener(buttonView -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(R.string.message);
-                    builder.setMessage(getString(R.string.you_have_clicked) + clickedText);
-                    builder.setIcon(R.mipmap.ic_launcher_round);
-                    //点击对话框以外的区域是否让对话框消失
-                    builder.setCancelable(true);
-                    //设置正面按钮
-                    builder.setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, getString(R.string.you_clicked_yes), Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    });
+        items = new ArrayList<>();
+        items.add(new Item("青椒", 1.5, R.drawable.qingjiao));
+        items.add(new Item("萝卜", 2.5, R.drawable.luobo));
+        items.add(new Item("白菜", 3.5, R.drawable.baicai));
+        for(int i=0;i<5;++i)
+            items.add(new Item("白菜1", 3.5, R.drawable.baicai));
 
-                    //设置反面按钮
-                    builder.setNegativeButton("Negative", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, R.string.you_clicked_no, Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    });
 
-                    AlertDialog dialog = builder.create();
-                    //对话框显示的监听事件
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            Log.e("MainActivity", getString(R.string.the_dialog_shows));
-                        }
-                    });
-                    //对话框消失的监听事件
-                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            Log.e("MainActivity", getString(R.string.the_dialog_disppeared));
-                        }
-                    });
-                    //显示对话框
-                    dialog.show();
-                }
-        );
+
+        ShopItemAdapter shopItemAdapter = new ShopItemAdapter(items);
+        mainRecyclerView.setAdapter(shopItemAdapter);
+
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -93,14 +62,57 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private class ShopItemAdapter extends RecyclerView.Adapter {
+        private final List<Item> items;
 
-    private class TextViewOnClickListener implements View.OnClickListener {
+        public ShopItemAdapter(List<Item> items) {
+            this.items=items;
+        }
+
+        @NonNull
         @Override
-        public void onClick(View textViewClicked) {
-            TextView textView = (TextView) textViewClicked;
-            clickedText = (String) ((TextView) textViewClicked).getText();
-            Toast.makeText(MainActivity.this, clickedText, Toast.LENGTH_LONG)
-                    .show();
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            MyViewHolder myViewHolder= (MyViewHolder) holder;
+            myViewHolder.getTextViewName().setText(items.get(position).getTitle());
+            myViewHolder.getTextViewPrice().setText("" + items.get(position).getPrice());
+            myViewHolder.getImageViewPicture().setImageResource(items.get(position).getResourceId());
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        private class MyViewHolder extends RecyclerView.ViewHolder {
+            public ImageView getImageViewPicture() {
+                return imageViewPicture;
+            }
+
+            public TextView getTextViewName() {
+                return textViewName;
+            }
+
+            public TextView getTextViewPrice() {
+                return textViewPrice;
+            }
+
+            private final ImageView imageViewPicture;
+            private final TextView textViewName;
+            private final TextView textViewPrice;
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                this.imageViewPicture= itemView.findViewById(R.id.imageview_item);
+                this.textViewName= itemView.findViewById(R.id.textview_item_name);
+                this.textViewPrice=itemView.findViewById(R.id.textview_item_price);
+            }
         }
     }
 }
