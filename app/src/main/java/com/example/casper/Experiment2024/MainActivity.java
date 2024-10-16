@@ -3,7 +3,9 @@ package com.example.casper.Experiment2024;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +32,21 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> items;
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //item.getOrder()
+        switch (item.getItemId()) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                return super.onContextItemSelected(item);
+        }
+        return true;
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -51,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ShopItemAdapter shopItemAdapter = new ShopItemAdapter(items);
         mainRecyclerView.setAdapter(shopItemAdapter);
 
-
+        registerForContextMenu(mainRecyclerView);
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -90,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             return items.size();
         }
 
-        private class MyViewHolder extends RecyclerView.ViewHolder {
+        private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
             public ImageView getImageViewPicture() {
                 return imageViewPicture;
             }
@@ -112,6 +129,17 @@ public class MainActivity extends AppCompatActivity {
                 this.imageViewPicture= itemView.findViewById(R.id.imageview_item);
                 this.textViewName= itemView.findViewById(R.id.textview_item_name);
                 this.textViewPrice=itemView.findViewById(R.id.textview_item_price);
+
+                itemView.setOnCreateContextMenuListener(this);
+            }
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.setHeaderTitle("具体操作");
+
+                menu.add(0, 0, this.getAdapterPosition(), "添加" + this.getAdapterPosition());
+                menu.add(0, 1, this.getAdapterPosition(), "删除" + this.getAdapterPosition());
+                menu.add(0, 2, this.getAdapterPosition(), "修改" + this.getAdapterPosition());
             }
         }
     }
