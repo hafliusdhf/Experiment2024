@@ -11,4 +11,6 @@
     <string name="you_clicked_no">you clicked no</string>
     <string name="the_dialog_shows">对话框显示了</string>
     <string name="the_dialog_disppeared">对话框消失了</string>
+    <string name="item_name">Item name</string>
+    <string name="confirm">Confirm</string>
 </resources>

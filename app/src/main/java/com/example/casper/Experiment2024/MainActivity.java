@@ -1,21 +1,20 @@
 package com.example.casper.Experiment2024;
 
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,32 +22,69 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> items;
+    private ActivityResultLauncher<Intent> launcherAdd;
+    private ActivityResultLauncher<Intent> launcherUpdate;
+    private ShopItemAdapter shopItemAdapter;
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem itemMenu ) {
         //item.getOrder()
-        switch (item.getItemId()) {
+        switch (itemMenu.getItemId()) {
             case 0:
+                Intent intentAdd = new Intent(MainActivity.this, ItemActivity.class);
+                intentAdd.putExtra("position", itemMenu.getOrder());
+                launcherAdd.launch(intentAdd);
                 break;
             case 1:
+                Intent intentUpdate = new Intent(MainActivity.this, ItemActivity.class);
+                intentUpdate.putExtra("position", itemMenu.getOrder());
+                Item itemObject= items.get(itemMenu.getOrder());
+                intentUpdate.putExtra("item_name", itemObject.getTitle());
+                intentUpdate.putExtra("item_price", itemObject.getPrice());
+                launcherUpdate.launch(intentUpdate);
                 break;
             case 2:
                 break;
             default:
-                return super.onContextItemSelected(item);
+                return super.onContextItemSelected(itemMenu);
         }
         return true;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        launcherAdd = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        String itemName=data.getStringExtra("item_name");
+                        double itemPrice= data.getDoubleExtra("item_price",0);
+                        int position = data.getIntExtra("position",0);
+                        items.add(position,new Item(itemName, itemPrice, R.drawable.qingjiao));
+                        shopItemAdapter.notifyItemInserted(position);
+                    }
+                });
+        launcherUpdate = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        String itemName=data.getStringExtra("item_name");
+                        double itemPrice= data.getDoubleExtra("item_price",0);
+                        int position = data.getIntExtra("position",0);
+                        items.add(position,new Item(itemName, itemPrice, R.drawable.qingjiao));
+                        shopItemAdapter.notifyItemInserted(position);
+                    }
+                });
+
         EdgeToEdge.enable(this);
         //使用布局文件创建控件
         setContentView(R.layout.activity_main);
@@ -60,12 +96,9 @@ public class MainActivity extends AppCompatActivity {
         items.add(new Item("青椒", 1.5, R.drawable.qingjiao));
         items.add(new Item("萝卜", 2.5, R.drawable.luobo));
         items.add(new Item("白菜", 3.5, R.drawable.baicai));
-        for(int i=0;i<5;++i)
-            items.add(new Item("白菜1", 3.5, R.drawable.baicai));
 
 
-
-        ShopItemAdapter shopItemAdapter = new ShopItemAdapter(items);
+        shopItemAdapter = new ShopItemAdapter(items);
         mainRecyclerView.setAdapter(shopItemAdapter);
 
         registerForContextMenu(mainRecyclerView);
