@@ -1,6 +1,7 @@
 package com.example.casper.Experiment2024;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -15,12 +16,16 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.casper.Experiment2024.data.DataBank;
+import com.example.casper.Experiment2024.data.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,14 +46,34 @@ public class MainActivity extends AppCompatActivity {
                 launcherAdd.launch(intentAdd);
                 break;
             case 1:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.confirmation)
+                        .setMessage(R.string.are_you_sure_you_want_to_delete_the_item)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                items.remove(itemMenu.getOrder());
+                                shopItemAdapter.notifyItemRemoved(itemMenu.getOrder());
+                                DataBank databank=new DataBank(MainActivity.this);
+                                databank.saveItems(items);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // 用户取消删除
+                                dialog.dismiss();
+                            }
+                        });
+                // 创建并显示对话框
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            case 2:
                 Intent intentUpdate = new Intent(MainActivity.this, ItemActivity.class);
                 intentUpdate.putExtra("position", itemMenu.getOrder());
                 Item itemObject= items.get(itemMenu.getOrder());
                 intentUpdate.putExtra("item_name", itemObject.getTitle());
                 intentUpdate.putExtra("item_price", itemObject.getPrice());
                 launcherUpdate.launch(intentUpdate);
-                break;
-            case 2:
                 break;
             default:
                 return super.onContextItemSelected(itemMenu);
@@ -69,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
                         int position = data.getIntExtra("position",0);
                         items.add(position,new Item(itemName, itemPrice, R.drawable.qingjiao));
                         shopItemAdapter.notifyItemInserted(position);
+                        DataBank databank=new DataBank(MainActivity.this);
+                        databank.saveItems(items);
                     }
                 });
         launcherUpdate = registerForActivityResult(
@@ -77,11 +104,15 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         assert data != null;
-                        String itemName=data.getStringExtra("item_name");
-                        double itemPrice= data.getDoubleExtra("item_price",0);
-                        int position = data.getIntExtra("position",0);
-                        items.add(position,new Item(itemName, itemPrice, R.drawable.qingjiao));
-                        shopItemAdapter.notifyItemInserted(position);
+                        String itemName = data.getStringExtra("item_name");
+                        double itemPrice = data.getDoubleExtra("item_price", 0);
+                        int position = data.getIntExtra("position", 0);
+                        Item item = items.get(position);
+                        item.setTitle(itemName);
+                        item.setPrice(itemPrice);
+                        shopItemAdapter.notifyItemChanged(position);
+                        DataBank databank=new DataBank(MainActivity.this);
+                        databank.saveItems(items);
                     }
                 });
 
@@ -92,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView mainRecyclerView = findViewById(R.id.recyclerview_items);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        items = new ArrayList<>();
-        items.add(new Item("青椒", 1.5, R.drawable.qingjiao));
-        items.add(new Item("萝卜", 2.5, R.drawable.luobo));
-        items.add(new Item("白菜", 3.5, R.drawable.baicai));
+        DataBank databank=new DataBank(this);
+        items= databank.readItems();
+        if(items.isEmpty())
+            items.add(new Item("baicai", 1.5, R.drawable.baicai));
 
 
         shopItemAdapter = new ShopItemAdapter(items);

@@ -13,4 +13,8 @@
     <string name="the_dialog_disppeared">对话框消失了</string>
     <string name="item_name">Item name</string>
     <string name="confirm">Confirm</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="are_you_sure_you_want_to_delete_the_item">Are you sure you want to delete the item</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

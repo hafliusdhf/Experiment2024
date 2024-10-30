@@ -1,6 +1,8 @@
-package com.example.casper.Experiment2024;
+package com.example.casper.Experiment2024.data;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
     public String getTitle() {
         return title;
     }
@@ -13,8 +15,16 @@ public class Item {
         return resourceId;
     }
 
-    private final String title;
-    private final double price;
+    private String title;
+
+    public void setTitle(String itemName) {
+        this.title=itemName;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    private double price;
     private final int resourceId;
 
     public Item(String itemTitle, double itemPrice, int itemPictureResourceId) {
@@ -22,4 +32,5 @@ public class Item {
         this.price=itemPrice;
         this.resourceId=itemPictureResourceId;
     }
+
 }
