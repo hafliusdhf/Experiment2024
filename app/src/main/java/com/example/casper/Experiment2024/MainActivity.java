@@ -1,44 +1,20 @@
 package com.example.casper.Experiment2024;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.casper.Experiment2024.data.DataBank;
-import com.example.casper.Experiment2024.data.Item;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
-    private String[] tabHeaderStrings={"Items","News","Map"};
+    private final String[] tabHeaderStrings={"Items","News","Map"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return WebViewFragment.newInstance("http://news.sina.com.cn");
                 case 2:
-                    return new ShoppingListFragment();
-                    //return new WebViewFragment();
                 default:
-                    return null;
+                    return new ShoppingListFragment();
             }
         }
 

@@ -96,19 +96,15 @@ public class ShoppingListFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
                 builder.setTitle(R.string.confirmation)
                         .setMessage(R.string.are_you_sure_you_want_to_delete_the_item)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                items.remove(itemMenu.getOrder());
-                                shopItemAdapter.notifyItemRemoved(itemMenu.getOrder());
-                                DataBank databank=new DataBank(ShoppingListFragment.this.getContext());
-                                databank.saveItems(items);
-                            }
+                        .setPositiveButton(R.string.yes, (dialog, id) -> {
+                            items.remove(itemMenu.getOrder());
+                            shopItemAdapter.notifyItemRemoved(itemMenu.getOrder());
+                            DataBank databank=new DataBank(ShoppingListFragment.this.getContext());
+                            databank.saveItems(items);
                         })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // 用户取消删除
-                                dialog.dismiss();
-                            }
+                        .setNegativeButton(R.string.no, (dialog, id) -> {
+                            // 用户取消删除
+                            dialog.dismiss();
                         });
                 // 创建并显示对话框
                 AlertDialog dialog = builder.create();
@@ -130,10 +126,8 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        //mParam1 = getArguments().getString(ARG_PARAM1);
+        //mParam2 = getArguments().getString(ARG_PARAM2);
         launcherAdd = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -170,7 +164,7 @@ public class ShoppingListFragment extends Fragment {
 
     }
 
-    private class ShopItemAdapter extends RecyclerView.Adapter {
+    private static class ShopItemAdapter extends RecyclerView.Adapter {
         private final List<Item> items;
 
         public ShopItemAdapter(List<Item> items) {
