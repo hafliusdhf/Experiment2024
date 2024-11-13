@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return WebViewFragment.newInstance("http://news.sina.com.cn");
                 case 2:
+                    return new TencentMapsFragment();
                 default:
                     return new ShoppingListFragment();
             }
