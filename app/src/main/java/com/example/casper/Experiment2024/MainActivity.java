@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
-    private final String[] tabHeaderStrings={"Items","News","Map"};
+    private final String[] tabHeaderStrings={"Items","News","Map","Time"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         ).attach();
     }
     public class FragmentAdapter extends FragmentStateAdapter {
-        private static final int NUM_TABS = 3;
         public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
             super(fragmentManager, lifecycle);
         }
@@ -51,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     return new TencentMapsFragment();
                 default:
-                    return new ShoppingListFragment();
+                    return ClockViewFragment.newInstance();
             }
         }
 
         @Override
         public int getItemCount() {
-            return NUM_TABS;
+            return tabHeaderStrings.length;
         }
     }
 }
