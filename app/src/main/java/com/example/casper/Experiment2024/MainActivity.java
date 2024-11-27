@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
-    private final String[] tabHeaderStrings={"Items","News","Map","Time"};
+    private final String[] tabHeaderStrings={"Items","News","Map","Time","Game"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
                     return WebViewFragment.newInstance("http://news.sina.com.cn");
                 case 2:
                     return new TencentMapsFragment();
-                default:
+                case 3:
                     return ClockViewFragment.newInstance();
+                default:
+                    return GameViewFragment.newInstance();
             }
         }
 
