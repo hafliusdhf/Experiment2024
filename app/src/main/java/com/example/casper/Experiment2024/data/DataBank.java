@@ -3,10 +3,7 @@ package com.example.casper.Experiment2024.data;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.casper.Experiment2024.MainActivity;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
