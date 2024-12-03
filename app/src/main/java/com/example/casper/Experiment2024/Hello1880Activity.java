@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hello1880Activity extends AppCompatActivity {
     private String clickedNumber = "";
@@ -20,68 +22,14 @@ public class Hello1880Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello1880);
-        // 初始化边缘到边缘支持
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        // 添加按钮的点击事件
-        setupButtonListeners();
     }
 
-    private void setupButtonListeners() {
-        // 为数字按钮添加点击事件
-        for (int i = 0; i <= 9; i++) {
-            final int number = i;
-            Button button = findViewById(getResources().getIdentifier("buttonview_number_" + i, "id", getPackageName()));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickedNumber += number; // 将点击的数字添加到clickedNumber中
-                    updateDisplay(); // 更新显示
-                }
-            });
-        }
-        // Clean按钮点击事件
-        Button cleanButton = findViewById(R.id.buttonview_clean);
-        cleanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(Hello1880Activity.this)
-                        .setMessage("Are you sure to clean the number?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                clickedNumber = ""; // 清空clickedNumber
-                                updateDisplay(); // 更新显示
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            }
-        });
-        // Input按钮点击事件
-        Button inputButton = findViewById(R.id.buttonview_input);
-        inputButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!clickedNumber.isEmpty()) {
-                    Toast.makeText(Hello1880Activity.this, "You have input number " + clickedNumber, Toast.LENGTH_SHORT).show();
-                    clickedNumber = ""; // 输入后清空clickedNumber
-                    updateDisplay(); // 更新显示
-                } else {
-                    Toast.makeText(Hello1880Activity.this, "Please enter a number", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void updateDisplay() {
-        // 假设你有一个TextView用于显示当前输入的数字
-        TextView display = findViewById(R.id.display);
-        if (display != null) {
-            display.setText(clickedNumber);
-        }
+    // 添加 getListBooks 方法
+    public List<Book> getListBooks() {
+        List<Book> books = new ArrayList<>();
+        books.add(new Book("创新工程实践", R.drawable.book_no_name));
+        books.add(new Book("软件项目管理案例教程（第3版）", R.drawable.book_2));
+        books.add(new Book("信息安全数学基础（第2版）", R.drawable.book_1));
+        return books;
     }
 }

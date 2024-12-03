@@ -1,22 +1,13 @@
 <resources>
     <string name="app_name">移动软件开发与安全作业</string>
-    <string name="hello_world">Hello world</string>
-    <string name="hello_china">Hello China!</string>
-    <string name="hello_jnu">Hello JNU</string>
-    <string name="show_message">Show Message</string>
-    <string name="message">Message</string>
-    <string name="you_have_clicked">"You have clicked "</string>
-    <string name="positive">Positive</string>
-    <string name="you_clicked_yes">you clicked yes</string>
-    <string name="you_clicked_no">you clicked no</string>
-    <string name="the_dialog_shows">对话框显示了</string>
-    <string name="the_dialog_disppeared">对话框消失了</string>
-    <string name="item_name">Item name</string>
+    <string name="book_cover">Book Cover</string>
+
+    <!-- 添加以下缺失的字符串 -->
+    <string name="item_name">Item Name</string>
+    <string name="item_price">Item Price</string>
     <string name="confirm">Confirm</string>
-    <string name="confirmation">Confirmation</string>
-    <string name="are_you_sure_you_want_to_delete_the_item">Are you sure you want to delete the item</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="item_name_hint">Please input item name</string>
+    <string name="item_price_hint">Please input item price</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

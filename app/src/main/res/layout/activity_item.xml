@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ItemActivity">
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -20,13 +21,15 @@
         <EditText
             android:id="@+id/edit_text_item_name"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:autofillHints="Please input item name"
             android:ems="10"
             android:inputType="text"
-            android:text="" />
+            android:text=""
+            android:hint="@string/item_name_hint" />
     </LinearLayout>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -35,23 +38,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/item_name" />
+            android:text="@string/item_price" />
 
         <EditText
             android:id="@+id/edit_text_item_price"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:autofillHints="Please input item price"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:text="0.0" />
+            android:text="0.0"
+            android:hint="@string/item_price_hint" />
     </LinearLayout>
+
     <Button
         android:id="@+id/button_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/confirm"
-        />
+        android:text="@string/confirm" />
 
 </LinearLayout>
