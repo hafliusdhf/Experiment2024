@@ -1,30 +1,104 @@
 package com.example.casper.Experiment2024;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-import android.widget.TextView; // 添加此行
-import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class Hello1880Activity extends AppCompatActivity {
-    private String clickedNumber = "";
+    private RecyclerView recyclerView;
+    private BookAdapter bookAdapter;
+    private List<Book> books;
+    private ActivityResultLauncher<Intent> addEditLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello1880);
+        recyclerView = findViewById(R.id.recycler_view);
+        books = getListBooks();
+        bookAdapter = new BookAdapter(books, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(bookAdapter);
+        registerForContextMenu(recyclerView);
+
+        addEditLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Book book = (Book) result.getData().getSerializableExtra("book");
+                        if (result.getData().hasExtra("position")) {
+                            int position = result.getData().getIntExtra("position", -1);
+                            if (position >= 0 && position <= books.size()) {
+                                books.set(position, book);
+                                bookAdapter.notifyItemChanged(position);
+                            }
+                        } else {
+                            books.add(book);
+                            bookAdapter.notifyItemInserted(books.size() - 1);
+                        }
+                    }
+                });
     }
 
-    // 添加 getListBooks 方法
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        if (info == null) return super.onContextItemSelected(item);
+        int position = info.position; // 现在可以安全地获取位置了
+        if (item.getItemId() == R.id.menu_add) {
+            launchAddEditActivity(null);
+            return true;
+        } else if (item.getItemId() == R.id.menu_edit) {
+            launchAddEditActivity(position);
+            return true;
+        } else if (item.getItemId() == R.id.menu_delete) {
+            showDeleteConfirmationDialog(position);
+            return true;
+        } else {
+            return super.onContextItemSelected(item);
+        }
+    }
+
+    private void launchAddEditActivity(Integer position) {
+        Intent intent = new Intent(this, AddEditBookActivity.class);
+        if (position != null) {
+            intent.putExtra("book", books.get(position));
+            intent.putExtra("position", position);
+        }
+        addEditLauncher.launch(intent);
+    }
+
+    private void showDeleteConfirmationDialog(final int position) {
+        new AlertDialog.Builder(this)
+                .setTitle("确认删除")
+                .setMessage("您确定要删除这本书吗？")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    books.remove(position);
+                    bookAdapter.notifyItemRemoved(position);
+                    bookAdapter.notifyItemRangeChanged(position, books.size() - position);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
     public List<Book> getListBooks() {
         List<Book> books = new ArrayList<>();
         books.add(new Book("创新工程实践", R.drawable.book_no_name));
