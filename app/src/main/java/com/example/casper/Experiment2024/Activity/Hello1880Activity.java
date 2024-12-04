@@ -1,4 +1,4 @@
-package com.example.casper.Experiment2024;
+package com.example.casper.Experiment2024.Activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -16,18 +16,28 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+import com.example.casper.Experiment2024.Book;
+import com.example.casper.Experiment2024.BookAdapter;
+import com.example.casper.Experiment2024.R;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public class Hello1880Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
     private List<Book> books;
     private ActivityResultLauncher<Intent> addEditLauncher;
+    private static final String FILE_NAME = "books_data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello1880);
         recyclerView = findViewById(R.id.recycler_view);
-        books = getListBooks();
+        books = loadBooks();
         bookAdapter = new BookAdapter(books, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(bookAdapter);
@@ -50,6 +60,26 @@ public class Hello1880Activity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    // 保存书籍数据
+    private void saveBooks() {
+        try (FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(books);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 加载书籍数据
+    private List<Book> loadBooks() {
+        try (FileInputStream fis = openFileInput(FILE_NAME);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+            return (List<Book>) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // 如果读取失败，返回空列表
+        }
     }
 
     @Override
@@ -78,7 +108,7 @@ public class Hello1880Activity extends AppCompatActivity {
     }
 
     private void launchAddEditActivity(Integer position) {
-        Intent intent = new Intent(this, AddEditBookActivity.class);
+        Intent intent = new Intent(this, BookDetailsActivity.class);
         if (position != null) {
             intent.putExtra("book", books.get(position));
             intent.putExtra("position", position);

@@ -1,13 +1,15 @@
-package com.example.casper.Experiment2024;
+package com.example.casper.Experiment2024.data;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.casper.Experiment2024.Activity.Hello1880Activity;
+import com.example.casper.Experiment2024.R;
 
 import java.util.List;
 

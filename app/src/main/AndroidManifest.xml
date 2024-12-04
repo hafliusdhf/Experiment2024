@@ -20,16 +20,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".AddEditBookActivity"
+            android:name=".Activity.BookDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ImageViewActivity"
+            android:name=".Activity.ImageViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Hello1880Activity"
+            android:name=".Activity.Hello1880Activity"
             android:exported="false" />
         <activity
-            android:name=".ItemActivity"
+            android:name=".Activity.ItemActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

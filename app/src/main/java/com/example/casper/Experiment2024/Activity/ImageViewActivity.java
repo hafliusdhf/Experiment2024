@@ -1,4 +1,4 @@
-package com.example.casper.Experiment2024;//package com.example.casper.Experiment2024;
+package com.example.casper.Experiment2024.Activity;//package com.example.casper.Experiment2024;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,9 +7,8 @@ import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.casper.Experiment2024.R;
 
 public class ImageViewActivity extends AppCompatActivity {
     private Button buttonPrevious = (Button)findViewById(R.id.button_previous);

@@ -1,4 +1,4 @@
-package com.example.casper.Experiment2024;
+package com.example.casper.Experiment2024.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AddEditBookActivity extends AppCompatActivity {
+import com.example.casper.Experiment2024.Book;
+import com.example.casper.Experiment2024.R;
+
+public class BookDetailsActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private Button buttonSave;
     private boolean isEditMode = false;
