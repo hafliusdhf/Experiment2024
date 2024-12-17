@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.casper.Experiment2024.Book;
 import com.example.casper.Experiment2024.R;
+import com.example.casper.Experiment2024.data.Book; // 确保导入Book类
 
 public class BookDetailsActivity extends AppCompatActivity {
     private EditText editTextTitle;
@@ -20,11 +19,13 @@ public class BookDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_book);
         editTextTitle = findViewById(R.id.edit_text_title);
         buttonSave = findViewById(R.id.button_save);
+
         if (getIntent().hasExtra("book")) {
             isEditMode = true;
             Book book = (Book) getIntent().getSerializableExtra("book");
             editTextTitle.setText(book.getTitle());
         }
+
         buttonSave.setOnClickListener(v -> {
             String title = editTextTitle.getText().toString();
             Book newBook = new Book(title, R.drawable.book_no_name); // 默认图片

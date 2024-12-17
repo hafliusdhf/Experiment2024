@@ -1,5 +1,5 @@
 package com.example.casper.Experiment2024.Activity;
-
+import java.util.List;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,17 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.List;
+import com.example.casper.Experiment2024.data.Book;
+import com.example.casper.Experiment2024.adapter.BookAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-
-import com.example.casper.Experiment2024.Book;
-import com.example.casper.Experiment2024.BookAdapter;
 import com.example.casper.Experiment2024.R;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import com.example.casper.Experiment2024.data.BookRepository;
 
 public class Hello1880Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -63,25 +57,13 @@ public class Hello1880Activity extends AppCompatActivity {
     }
     // 保存书籍数据
     private void saveBooks() {
-        try (FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(books);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        BookRepository.saveBooks(books, this); // 使用BookRepository的saveBooks方法
     }
 
     // 加载书籍数据
     private List<Book> loadBooks() {
-        try (FileInputStream fis = openFileInput(FILE_NAME);
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-            return (List<Book>) ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>(); // 如果读取失败，返回空列表
-        }
+        return BookRepository.loadBooks(this); // 使用BookRepository的loadBooks方法
     }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
