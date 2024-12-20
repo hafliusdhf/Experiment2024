@@ -2,16 +2,16 @@ package com.example.casper.Experiment2024.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.casper.Experiment2024.fragment.BookListFragment;
-import com.example.casper.Experiment2024.fragment.WebViewFragment;
-import com.example.casper.Experiment2024.fragment.TencentMapFragment;
+import com.example.casper.Experiment2024.fragment.TencentMapFragment; // 假设你有这个 Fragment
+import com.example.casper.Experiment2024.fragment.WebViewFragment; // 假设你有这个 Fragment
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-        super(fragmentActivity);
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager) {
+        super(fragmentManager.getPrimaryNavigationFragment());
     }
 
     @NonNull
@@ -19,18 +19,18 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new BookListFragment(); // 图书 Fragment
+                return new BookListFragment();
             case 1:
-                return new WebViewFragment(); // 搜索 Fragment
+                return new WebViewFragment();
             case 2:
-                return new TencentMapFragment(); // 地图 Fragment
+                return new TencentMapFragment();
             default:
-                return new BookListFragment(); // 默认返回图书 Fragment
+                return new BookListFragment();
         }
     }
 
     @Override
     public int getItemCount() {
-        return 3; // Tab 数量
+        return 3;
     }
 }
