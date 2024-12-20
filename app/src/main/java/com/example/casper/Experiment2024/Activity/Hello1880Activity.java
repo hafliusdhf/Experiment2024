@@ -23,7 +23,7 @@ public class Hello1880Activity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
 
         // 设置适配器
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this.getSupportFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
 
         // 连接 TabLayout 和 ViewPager2

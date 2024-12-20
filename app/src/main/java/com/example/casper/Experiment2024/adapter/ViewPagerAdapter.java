@@ -2,16 +2,16 @@ package com.example.casper.Experiment2024.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
 import com.example.casper.Experiment2024.fragment.BookListFragment;
 import com.example.casper.Experiment2024.fragment.TencentMapFragment; // 假设你有这个 Fragment
 import com.example.casper.Experiment2024.fragment.WebViewFragment; // 假设你有这个 Fragment
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
-
-    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager) {
-        super(fragmentManager.getPrimaryNavigationFragment());
+    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
     }
 
     @NonNull
@@ -21,9 +21,9 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 0:
                 return new BookListFragment();
             case 1:
-                return new WebViewFragment();
+                return new WebViewFragment(); // 替换为实际的 Fragment
             case 2:
-                return new TencentMapFragment();
+                return new TencentMapFragment(); // 替换为实际的 Fragment
             default:
                 return new BookListFragment();
         }
@@ -31,6 +31,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 3; // Tab 的数量
     }
 }
