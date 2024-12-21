@@ -1,6 +1,7 @@
 package com.example.casper.Experiment2024.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,10 @@ public class TencentMapFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_tencent_map, container, false);
         mapView = rootView.findViewById(R.id.map_view);
+        if (mapView == null) {
+            Log.e("TencentMapFragment", "MapView is null, please check the layout or initialization process.");
+            return rootView;
+        }
         tencentMap = mapView.getMap();
 
         // 设置地图中心和缩放级别
