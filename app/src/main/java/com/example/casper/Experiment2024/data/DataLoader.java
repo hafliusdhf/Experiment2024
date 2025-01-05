@@ -28,12 +28,13 @@ public class DataLoader {
 
                 // 提取商店信息
                 String name = shopObject.getString("name");
-                String latitude = shopObject.getString("latitude");
-                String longitude = shopObject.getString("longitude");
+                double latitude = Double.parseDouble(shopObject.getString("latitude")); // 将字符串类型的纬度转换为double类型
+                double longitude = Double.parseDouble(shopObject.getString("longitude")); // 将字符串类型的经度转换为double类型
                 String memo = shopObject.getString("memo");
 
                 // 创建Shop对象
-                ShopLocation shop = new ShopLocation(name, latitude, longitude, memo);
+                ShopLocation shop = new ShopLocation(name, latitude, longitude);
+                shop.setMemo(memo); // 假设ShopLocation类有对应的setMemo方法来设置备注信息
                 locationsArrayList.add(shop);
 
                 // 这里可以将shop对象添加到列表或进行其他处理
