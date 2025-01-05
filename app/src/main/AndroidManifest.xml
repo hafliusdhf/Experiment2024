@@ -30,6 +30,7 @@
         android:theme="@style/Theme.Experiment2024"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".Activity.BookDetailsActivity"
             android:exported="false" />
@@ -40,7 +41,7 @@
             android:name=".Activity.ItemActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.Hello1880Activity"
+            android:name=".Activity.Hello1880Activiy"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
