@@ -1,7 +1,7 @@
 package com.example.casper.Experiment2024.data;
 
 import java.io.Serializable;
-import com.example.casper.Experiment2024.Activity.Hello1880Activity;
+import com.example.casper.Experiment2024.Activity.Hello1880Activiy;
 
 public class Book implements Serializable {
     private String title;

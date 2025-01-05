@@ -49,7 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <!--主活动-->
+        <activity android:name=".Activity.AddBookActivity" /><!--添加图书信息活动-->
+        <activity android:name=".Activity.UpdateBookActivity" /><!--更新图书信息活动-->
         <meta-data
             android:name="TencentMapSDK"
             android:value="RPEBZ-BE6LB-SSHUP-NU24T-3J362-PFBWB" />

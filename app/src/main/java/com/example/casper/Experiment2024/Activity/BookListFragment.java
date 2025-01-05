@@ -9,223 +9,162 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.casper.Experiment2024.R;
-import com.example.casper.Experiment2024.data.DataBank;
-import com.example.casper.Experiment2024.data.Item;
-
+import com.example.casper.Experiment2024.data.Book;
+import android.widget.TextView;
+import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookListFragment extends Fragment {
-
+    private ArrayList<Book> books;
+    private BookAdapter bookAdapter;
+    private ActivityResultLauncher<Intent> launcherAdd;
+    private ActivityResultLauncher<Intent> launcherUpdate;
 
     public BookListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ShoppingListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static BookListFragment newInstance() {
-        BookListFragment fragment = new BookListFragment();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new BookListFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootViewer = inflater.inflate(R.layout.fragment_book_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_book_list, container, false);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_the_books);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        RecyclerView mainRecyclerView = rootViewer.findViewById(R.id.recyclerview_items);
-        mainRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
-        DataBank databank=new DataBank(this.getContext());
-        items= databank.readItems();
-        if(items.isEmpty())
-            items.add(new Item("baicai", 1.5, R.drawable.baicai));
-
-
-        shopItemAdapter = new ShopItemAdapter(items);
-        mainRecyclerView.setAdapter(shopItemAdapter);
-
-        registerForContextMenu(mainRecyclerView);
-
-
-        return rootViewer;
+        // Initialize books list
+        books = (ArrayList<Book>) getListBooks(); // 获取图书列表
+        bookAdapter = new BookAdapter(books);
+        recyclerView.setAdapter(bookAdapter);
+        registerForContextMenu(recyclerView);
+        return rootView;
     }
-    private ArrayList<Item> items;
-    private ActivityResultLauncher<Intent> launcherAdd;
-    private ActivityResultLauncher<Intent> launcherUpdate;
-    private ShopItemAdapter shopItemAdapter;
 
-    @Override
-    public boolean onContextItemSelected(MenuItem itemMenu ) {
-        //item.getOrder()
-        switch (itemMenu.getItemId()) {
-            case 0:
-                Intent intentAdd = new Intent(this.getContext(), ItemActivity.class);
-                intentAdd.putExtra("position", itemMenu.getOrder());
-                launcherAdd.launch(intentAdd);
-                break;
-            case 1:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-                builder.setTitle(R.string.confirmation)
-                        .setMessage(R.string.are_you_sure_you_want_to_delete_the_item)
-                        .setPositiveButton(R.string.yes, (dialog, id) -> {
-                            items.remove(itemMenu.getOrder());
-                            shopItemAdapter.notifyItemRemoved(itemMenu.getOrder());
-                            DataBank databank=new DataBank(BookListFragment.this.getContext());
-                            databank.saveItems(items);
-                        })
-                        .setNegativeButton(R.string.no, (dialog, id) -> {
-                            // 用户取消删除
-                            dialog.dismiss();
-                        });
-                // 创建并显示对话框
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                break;
-            case 2:
-                Intent intentUpdate = new Intent(BookListFragment.this.getContext(), ItemActivity.class);
-                intentUpdate.putExtra("position", itemMenu.getOrder());
-                Item itemObject= items.get(itemMenu.getOrder());
-                intentUpdate.putExtra("item_name", itemObject.getTitle());
-                intentUpdate.putExtra("item_price", itemObject.getPrice());
-                launcherUpdate.launch(intentUpdate);
-                break;
-            default:
-                return super.onContextItemSelected(itemMenu);
-        }
-        return true;
+    private List<Book> getListBooks() {
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book("创新工程实践", R.drawable.book_no_name));
+        bookList.add(new Book("软件项目管理案例教程（第3版）", R.drawable.book_2));
+        bookList.add(new Book("信息安全数学基础（第2版）", R.drawable.book_1));
+        return bookList;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mParam1 = getArguments().getString(ARG_PARAM1);
-        //mParam2 = getArguments().getString(ARG_PARAM2);
         launcherAdd = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        assert data != null;
-                        String itemName=data.getStringExtra("item_name");
-                        double itemPrice= data.getDoubleExtra("item_price",0);
-                        int position = data.getIntExtra("position",0);
-                        items.add(position,new Item(itemName, itemPrice, R.drawable.qingjiao));
-                        shopItemAdapter.notifyItemInserted(position);
-                        DataBank databank=new DataBank(this.getContext());
-                        databank.saveItems(items);
+                        if (data != null) {
+                            String bookName = data.getStringExtra("book_name");
+                            books.add(new Book(bookName, R.drawable.book_1)); // 使用默认封面
+                            bookAdapter.notifyItemInserted(books.size() - 1);
+                        }
                     }
                 });
+
         launcherUpdate = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        assert data != null;
-                        String itemName = data.getStringExtra("item_name");
-                        double itemPrice = data.getDoubleExtra("item_price", 0);
-                        int position = data.getIntExtra("position", 0);
-                        Item item = items.get(position);
-                        item.setTitle(itemName);
-                        item.setPrice(itemPrice);
-                        shopItemAdapter.notifyItemChanged(position);
-                        DataBank databank=new DataBank(this.getContext());
-                        databank.saveItems(items);
+                        if (data != null) {
+                            int position = data.getIntExtra("position", -1);
+                            String bookName = data.getStringExtra("book_name");
+                            if (position != -1 && bookName != null) {
+                                books.get(position).setTitle(bookName);
+                                bookAdapter.notifyItemChanged(position);
+                            }
+                        }
                     }
                 });
-
-
     }
 
-    private static class ShopItemAdapter extends RecyclerView.Adapter {
-        private final List<Item> items;
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 0: // 添加
+                Intent intentAdd = new Intent(getContext(), AddBookActivity.class);
+                launcherAdd.launch(intentAdd);
+                break;
+            case 1: // 删除
+                new AlertDialog.Builder(getContext())
+                        .setTitle("确认删除")
+                        .setMessage("您确定要删除这本书吗？")
+                        .setPositiveButton("是", (dialog, which) -> {
+                            books.remove(item.getOrder());
+                            bookAdapter.notifyItemRemoved(item.getOrder());
+                        })
+                        .setNegativeButton("否", null)
+                        .show();
+                break;
+            case 2: // 修改
+                Intent intentUpdate = new Intent(getContext(), UpdateBookActivity.class);
+                intentUpdate.putExtra("position", item.getOrder());
+                intentUpdate.putExtra("book_name", books.get(item.getOrder()).getTitle());
+                launcherUpdate.launch(intentUpdate);
+                break;
+            default:
+                return super.onContextItemSelected(item);
+        }
+        return true;
+    }
 
-        public ShopItemAdapter(List<Item> items) {
-            this.items=items;
+    private static class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+        private final List<Book> books;
+
+        public BookAdapter(List<Book> books) {
+            this.books = books;
         }
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item, parent, false);
-            return new MyViewHolder(view);
+        public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
+            return new BookViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            MyViewHolder myViewHolder= (MyViewHolder) holder;
-            myViewHolder.getTextViewName().setText(items.get(position).getTitle());
-            myViewHolder.getTextViewPrice().setText("" + items.get(position).getPrice());
-            myViewHolder.getImageViewPicture().setImageResource(items.get(position).getResourceId());
+        public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
+            Book book = books.get(position);
+            holder.textViewName.setText(book.getTitle());
+            holder.imageViewCover.setImageResource(book.getCoverResourceId());
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return books.size();
         }
 
-        private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
-            public ImageView getImageViewPicture() {
-                return imageViewPicture;
-            }
+        static class BookViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+            TextView textViewName;
+            ImageView imageViewCover;
 
-            public TextView getTextViewName() {
-                return textViewName;
-            }
-
-            public TextView getTextViewPrice() {
-                return textViewPrice;
-            }
-
-            private final ImageView imageViewPicture;
-            private final TextView textViewName;
-            private final TextView textViewPrice;
-
-            public MyViewHolder(@NonNull View itemView) {
+            public BookViewHolder(@NonNull View itemView) {
                 super(itemView);
-                this.imageViewPicture= itemView.findViewById(R.id.imageview_item);
-                this.textViewName= itemView.findViewById(R.id.textview_item_name);
-                this.textViewPrice=itemView.findViewById(R.id.textview_item_price);
-
+                textViewName = itemView.findViewById(R.id.text_view_book_name);
+                imageViewCover = itemView.findViewById(R.id.image_view_book_cover);
                 itemView.setOnCreateContextMenuListener(this);
             }
 
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.setHeaderTitle("具体操作");
-
-                menu.add(0, 0, this.getAdapterPosition(), "添加" + this.getAdapterPosition());
-                menu.add(0, 1, this.getAdapterPosition(), "删除" + this.getAdapterPosition());
-                menu.add(0, 2, this.getAdapterPosition(), "修改" + this.getAdapterPosition());
+                menu.setHeaderTitle("操作");
+                menu.add(0, 0, getAdapterPosition(), "添加");
+                menu.add(0, 1, getAdapterPosition(), "删除");
+                menu.add(0, 2, getAdapterPosition(), "修改");
             }
         }
     }
-
 }
