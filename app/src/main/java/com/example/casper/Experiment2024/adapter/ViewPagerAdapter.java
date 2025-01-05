@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.casper.Experiment2024.fragment.BookListFragment;
 import com.example.casper.Experiment2024.fragment.TencentMapFragment; // 假设你有这个 Fragment
-import com.example.casper.Experiment2024.fragment.WebViewFragment; // 假设你有这个 Fragment
+
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
