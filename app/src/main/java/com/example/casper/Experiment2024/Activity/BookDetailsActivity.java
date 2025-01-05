@@ -16,7 +16,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_edit_book);
+        setContentView(R.layout.activity_book_details);
         editTextTitle = findViewById(R.id.edit_text_title);
         buttonSave = findViewById(R.id.button_save);
 
