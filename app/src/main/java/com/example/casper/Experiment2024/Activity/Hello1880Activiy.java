@@ -1,8 +1,6 @@
 package com.example.casper.Experiment2024.Activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,7 +13,7 @@ import com.example.casper.Experiment2024.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class Hello1880Activiy extends Activity {
+public class Hello1880Activiy extends AppCompatActivity {
     private final String[] tabHeaderStrings={"图书","搜索","地图","时钟","游戏"};
 
     @Override

@@ -28,13 +28,13 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ShoppingListFragment#newInstance} factory method to
+ * Use the {@link BookListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment {
+public class BookListFragment extends Fragment {
 
 
-    public ShoppingListFragment() {
+    public BookListFragment() {
         // Required empty public constructor
     }
 
@@ -45,8 +45,8 @@ public class ShoppingListFragment extends Fragment {
      * @return A new instance of fragment ShoppingListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ShoppingListFragment newInstance() {
-        ShoppingListFragment fragment = new ShoppingListFragment();
+    public static BookListFragment newInstance() {
+        BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
@@ -58,7 +58,7 @@ public class ShoppingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootViewer = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View rootViewer = inflater.inflate(R.layout.fragment_book_list, container, false);
 
         RecyclerView mainRecyclerView = rootViewer.findViewById(R.id.recyclerview_items);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -98,7 +98,7 @@ public class ShoppingListFragment extends Fragment {
                         .setPositiveButton(R.string.yes, (dialog, id) -> {
                             items.remove(itemMenu.getOrder());
                             shopItemAdapter.notifyItemRemoved(itemMenu.getOrder());
-                            DataBank databank=new DataBank(ShoppingListFragment.this.getContext());
+                            DataBank databank=new DataBank(BookListFragment.this.getContext());
                             databank.saveItems(items);
                         })
                         .setNegativeButton(R.string.no, (dialog, id) -> {
@@ -110,7 +110,7 @@ public class ShoppingListFragment extends Fragment {
                 dialog.show();
                 break;
             case 2:
-                Intent intentUpdate = new Intent(ShoppingListFragment.this.getContext(), ItemActivity.class);
+                Intent intentUpdate = new Intent(BookListFragment.this.getContext(), ItemActivity.class);
                 intentUpdate.putExtra("position", itemMenu.getOrder());
                 Item itemObject= items.get(itemMenu.getOrder());
                 intentUpdate.putExtra("item_name", itemObject.getTitle());

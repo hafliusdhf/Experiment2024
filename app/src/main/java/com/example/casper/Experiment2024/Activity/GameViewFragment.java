@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.casper.Experiment2024.R;
 import com.example.casper.Experiment2024.view.CustomClockView;
 import com.example.casper.Experiment2024.view.WhackAMoleView;
 import android.view.MotionEvent;
