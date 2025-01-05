@@ -46,7 +46,7 @@ public class Hello1880Activiy extends AppCompatActivity {
                 case 0:
                     return BookListFragment.newInstance();
                 case 1:
-                    return WebViewFragment.newInstance("http://news.sina.com.cn");
+                    return WebViewFragment.newInstance("http://www.baidu.com");
                 case 2:
                     return new TencentMapsFragment();
                 case 3:

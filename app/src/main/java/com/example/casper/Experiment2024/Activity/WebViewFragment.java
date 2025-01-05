@@ -69,7 +69,7 @@ public class WebViewFragment extends Fragment {
 
 
         // 加载网址
-        webView.loadUrl(null==mUrl?"https://baidu.com":mUrl);
+        webView.loadUrl(null==mUrl?"http://www.baidu.com":mUrl);
         return rootView;
     }
 }

@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".GameViewFragment">
 
-    <com.example.casper.Experiment2024.view.WhackAMoleView
-        android:layout_height="match_parent"
+    <com.example.casper.Experiment2024.view.SubmarineDodgeBombsView
+        android:id="@+id/game_view"
         android:layout_width="match_parent"
-        android:id="@+id/game_view" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

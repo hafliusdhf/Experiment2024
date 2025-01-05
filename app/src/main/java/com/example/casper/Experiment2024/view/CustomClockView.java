@@ -1,12 +1,16 @@
 package com.example.casper.Experiment2024.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.example.casper.Experiment2024.R;
 
 import java.util.Calendar;
 
@@ -90,22 +94,24 @@ public class CustomClockView extends View {
         minute = calendar.get(Calendar.MINUTE);
         second = calendar.get(Calendar.SECOND);
 
+        // 加载时针图片资源（这里假设图片已放入res/drawable目录，且文件名分别为hour_hand.png等，根据实际情况修改）
+        Bitmap hourHandBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hour_hand);
+        // 调整时针图片大小（根据实际表盘大小等因素调整合适的尺寸，以下示例代码只是示意）
+        hourHandBitmap = Bitmap.createScaledBitmap(hourHandBitmap, (int) (Math.min(width, height) / 4), (int) (Math.min(width, height) / 4), true);
         // 绘制时针
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(10);
-        float hourAngle = (float) ((hour + minute / 60) * 30);
-        drawHand(canvas, hourAngle, Math.min(width, height) / 4);
+        canvas.drawBitmap(hourHandBitmap, (width / 2 - hourHandBitmap.getWidth() / 2), (height / 2 - hourHandBitmap.getHeight() / 2), paint);
 
+        // 加载分针图片资源
+        Bitmap minuteHandBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.minute_hand);
+        minuteHandBitmap = Bitmap.createScaledBitmap(minuteHandBitmap, (int) (Math.min(width, height) / 3), (int) (Math.min(width, height) / 2), true);
         // 绘制分针
-        paint.setStrokeWidth(6);
-        float minuteAngle = (float) ((minute + second / 60) * 6);
-        drawHand(canvas, minuteAngle, Math.min(width, height) / 3);
+        canvas.drawBitmap(minuteHandBitmap, (width / 2 - minuteHandBitmap.getWidth() / 2), (height / 2 - minuteHandBitmap.getHeight() / 2), paint);
 
+        // 加载秒针图片资源
+        Bitmap secondHandBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.second_hand);
+        secondHandBitmap = Bitmap.createScaledBitmap(secondHandBitmap, (int) (Math.min(width, height) / 2.5f), (int) (Math.min(width, height) / 1.5f), true);
         // 绘制秒针
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(4);
-        float secondAngle = (float) (second * 6);
-        drawHand(canvas, secondAngle, Math.min(width, height) / 2.5f);
+        canvas.drawBitmap(secondHandBitmap, (width / 2 - secondHandBitmap.getWidth() / 2), (height / 2 - secondHandBitmap.getHeight() / 2), paint);
     }
 
     private void drawHand(Canvas canvas, float angle, float length) {
